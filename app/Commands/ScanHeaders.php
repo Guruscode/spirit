@@ -2,6 +2,7 @@
 
 namespace App\Commands;
 
+use App\Traits\Domains;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
@@ -9,6 +10,8 @@ use LaravelZero\Framework\Commands\Command;
 
 class ScanHeaders extends Command
 {
+    use Domains;
+
     /**
      * The signature of the command.
      *
@@ -30,11 +33,7 @@ class ScanHeaders extends Command
      */
     public function handle()
     {
-        $domain = $this->argument('domain');
-
-        if (! Str::startsWith($domain, 'http')) {
-            $domain = "https://{$domain}";
-        }
+        $domain = $this->domain();
 
         $this->line("Scanning headers: <info>{$domain}</info>");
 
