@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Commands;
 
 use Illuminate\Console\Scheduling\Schedule;
@@ -24,8 +23,6 @@ class InspireCommand extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return mixed
      */
     public function handle()
     {
@@ -41,9 +38,6 @@ class InspireCommand extends Command
 
     /**
      * Define the command's schedule.
-     *
-     * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
-     * @return void
      */
     public function schedule(Schedule $schedule)
     {

@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Commands;
 
 use App\Traits\Domains;
@@ -27,8 +26,6 @@ class ScanSecurityTxt extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return mixed
      */
     public function handle()
     {
@@ -41,21 +38,18 @@ class ScanSecurityTxt extends Command
         $response = Http::withUserAgent(config('scan.useragent'))
             ->get($url);
 
-        $this->line($response->successful() ? "<info>FOUND</info>" : '<error>MISSING</error>');
+        $this->line($response->successful() ? '<info>FOUND</info>' : '<error>MISSING</error>');
 
         $url = $domain.'/.well-known/security.txt';
         $this->line("Checking <comment>{$url}</comment>");
         $response = Http::withUserAgent(config('scan.useragent'))
             ->get($url);
 
-        $this->line($response->successful() ? "<info>FOUND</info>" : '<error>MISSING</error>');
+        $this->line($response->successful() ? '<info>FOUND</info>' : '<error>MISSING</error>');
     }
 
     /**
      * Define the command's schedule.
-     *
-     * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
-     * @return void
      */
     public function schedule(Schedule $schedule): void
     {
