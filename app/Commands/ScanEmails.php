@@ -17,7 +17,8 @@ class ScanEmails extends Command
 
     protected string $grep = 'grep -rEo';
     protected string $regex = '\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}\\b';
-    protected array $exclude = ['vendor', 'node_modules'];
+    protected array $excludeDirs = ['vendor', 'node_modules', '.git'];
+    protected array $excludeFiles = ['composer.lock'];
 
     public function handle()
     {
@@ -27,11 +28,12 @@ class ScanEmails extends Command
         $this->line("Checking <comment>{$path}</comment>");
 
         $command = "{$this->grep} \"{$this->regex}\" ";
-        $command .= ' --exclude-dir='.implode(' --exclude-dir=', $this->exclude);
+        $command .= ' --exclude-dir='.implode(' --exclude-dir=', $this->excludeDirs);
+        $command .= ' --exclude='.implode(' --exclude=', $this->excludeFiles);
         $command .= ' ./';
 
         $this->line('* Looking for email addresses...');
-        $output = tap(Process::fromShellCommandline($command, $path), fn ($process) => $process->run())
+        $output = tap(Process::fromShellCommandline($command, $path, timeout: 600))->run()
             ->getOutput();
         $lines = explode(PHP_EOL, trim($output));
 
@@ -56,7 +58,7 @@ class ScanEmails extends Command
             return;
         }
 
-        $this->error("Found <info>{$breached->count()} breached emails.");
+        $this->error("Found {$breached->count()} breached emails.");
         $this->line($breached->implode(', '));
     }
 }

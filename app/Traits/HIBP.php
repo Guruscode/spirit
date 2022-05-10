@@ -2,6 +2,7 @@
 namespace App\Traits;
 
 use Illuminate\Http\Client\Response;
+use Illuminate\Support\Facades\Cache;
 
 trait HIBP
 {
@@ -11,12 +12,14 @@ trait HIBP
 
     public function pwned(string $email)
     {
-        $breach = $this->getService('breachedaccount', $email);
-        $paste = $this->getService('pasteaccount', $email);
+        return Cache::remember(__METHOD__.":{$email}", now()->addWeek(), function () use ($email) {
+            $breach = $this->getService('breachedaccount', $email);
+            $paste = $this->getService('pasteaccount', $email);
 
-        sleep(3); // Slow down to avoid the HIBP rate limiter
+            sleep(4); // Slow down to avoid the HIBP rate limiter
 
-        return $breach || $paste;
+            return $breach || $paste;
+        });
     }
 
     protected function getService(string $service, string $email): bool
