@@ -2,7 +2,6 @@
 namespace App\Commands;
 
 use App\Traits\HIBP;
-use LaravelZero\Framework\Commands\Command;
 use Symfony\Component\Process\Process;
 
 class ScanEmails extends Command

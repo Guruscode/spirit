@@ -4,7 +4,6 @@ namespace App\Commands;
 use App\Traits\Domains;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\Facades\Http;
-use LaravelZero\Framework\Commands\Command;
 
 class ScanHeaders extends Command
 {
