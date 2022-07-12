@@ -58,6 +58,7 @@ class ScanEmails extends Command
         }
 
         $this->error("Found {$breached->count()} breached emails.");
+        file_put_contents($path.'/pwned-emails.txt', $breached->implode(PHP_EOL));
         $this->line($breached->implode(', '));
     }
 }
