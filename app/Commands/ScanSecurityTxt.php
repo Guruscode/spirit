@@ -3,7 +3,6 @@
 namespace App\Commands;
 
 use App\Traits\Domains;
-use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\Facades\Http;
 
 class ScanSecurityTxt extends Command
