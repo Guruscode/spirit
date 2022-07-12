@@ -2,8 +2,6 @@
 
 namespace App\Commands;
 
-use Illuminate\Console\Scheduling\Schedule;
-
 class ScanDependencies extends Command
 {
     /**
@@ -12,6 +10,7 @@ class ScanDependencies extends Command
      * @var string
      */
     protected $signature = 'scan:dependencies {path : Local path to scan}';
+
     /**
      * The description of the command.
      *
@@ -33,4 +32,3 @@ class ScanDependencies extends Command
         $this->cmd('npm audit > npm-audit.txt');
     }
 }
-

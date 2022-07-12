@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests;
 
 use LaravelZero\Framework\Testing\TestCase as BaseTestCase;

@@ -2,11 +2,6 @@
 
 namespace App\Commands;
 
-use Illuminate\Console\Scheduling\Schedule;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Cache;
-use Symfony\Component\Process\Process;
-
 class ScanSecrets extends Command
 {
     /** @var string */

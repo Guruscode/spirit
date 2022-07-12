@@ -1,8 +1,8 @@
 <?php
+
 namespace App\Commands;
 
 use App\Traits\Http;
-use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Symfony\Component\Process\Process;

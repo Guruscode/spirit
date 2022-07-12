@@ -2,8 +2,6 @@
 
 namespace App\Commands;
 
-use Illuminate\Console\Scheduling\Schedule;
-
 class Scan extends Command
 {
     /** @var string */
@@ -20,15 +18,15 @@ class Scan extends Command
         $domain = $this->option('domain');
 
         if ($domain) {
-            $this->call("scan:headers", ['domain' => $domain]);
-            $this->call("scan:securitytxt", ['domain' => $domain]);
-            $this->call("scan:subdomains", ['domain' => $domain]);
+            $this->call('scan:headers', ['domain' => $domain]);
+            $this->call('scan:securitytxt', ['domain' => $domain]);
+            $this->call('scan:subdomains', ['domain' => $domain]);
         }
 
         if ($path) {
-            $this->call("scan:dependencies", ['path' => $path]);
-            $this->call("scan:emails", ['path' => $path]);
-            $this->call("scan:secrets", ['path' => $path]);
+            $this->call('scan:dependencies', ['path' => $path]);
+            $this->call('scan:emails', ['path' => $path]);
+            $this->call('scan:secrets', ['path' => $path]);
         }
     }
 }

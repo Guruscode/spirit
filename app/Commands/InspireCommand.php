@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Commands;
 
 use Illuminate\Console\Scheduling\Schedule;

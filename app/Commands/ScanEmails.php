@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Commands;
 
 use App\Traits\HIBP;
@@ -15,8 +16,11 @@ class ScanEmails extends Command
     protected $description = 'Finds all possible email addresses in the directory and checks their status with the HIBP API.';
 
     protected string $grep = 'grep -rEo';
+
     protected string $regex = '\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}\\b';
+
     protected array $excludeDirs = ['vendor', 'node_modules', '.git'];
+
     protected array $excludeFiles = ['composer.lock'];
 
     public function handle()
@@ -54,6 +58,7 @@ class ScanEmails extends Command
 
         if ($breached->isEmpty()) {
             $this->info('No breached emails found.');
+
             return;
         }
 
