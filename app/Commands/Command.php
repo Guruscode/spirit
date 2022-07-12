@@ -24,12 +24,18 @@ abstract class Command extends BaseCommand
 
     protected function bin(string $binary, string $command, ?string $path = null)
     {
-        return $this->command($command, $binary, $path);
+        return $this->cmd($command, $binary, $path);
     }
 
     protected function cmd(string $command, ?string $spiritBinary = null, ?string $path = null)
     {
-        $path ??= $this->argument('path') ?: getcwd();
+        if ($this->hasOption('path')) {
+            $path ??= $this->path ?? $this->option('path') ?? getcwd();
+        }
+        if ($this->hasArgument('path')) {
+            $path ??= $this->path ?? $this->argument('path') ?? getcwd();
+        }
+
         $command = ($spiritBinary ? base_path($spiritBinary).' ' : '').$command;
 
         $this->line("<comment>{$path}</comment>$ {$command}");

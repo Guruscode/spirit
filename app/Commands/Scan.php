@@ -14,16 +14,16 @@ class Scan extends Command
     {
         $this->header();
 
-        $path = $this->option('path');
-        $domain = $this->option('domain');
-
-        if ($domain) {
+        if ($domain = $this->option('domain')) {
             $this->call('scan:headers', ['domain' => $domain]);
             $this->call('scan:securitytxt', ['domain' => $domain]);
             $this->call('scan:subdomains', ['domain' => $domain]);
         }
 
-        if ($path) {
+        if ($path = $this->option('path')) {
+            chdir($path);
+            $path = getcwd();
+
             $this->call('scan:dependencies', ['path' => $path]);
             $this->call('scan:emails', ['path' => $path]);
             $this->call('scan:secrets', ['path' => $path]);

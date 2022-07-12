@@ -4,25 +4,12 @@ namespace App\Commands;
 
 class ScanDependencies extends Command
 {
-    /**
-     * The signature of the command.
-     *
-     * @var string
-     */
-    protected $signature = 'scan:dependencies {path : Local path to scan}';
+    /** @var string */
+    protected $signature = 'scan:dependencies {path? : Local path to scan}';
 
-    /**
-     * The description of the command.
-     *
-     * @var string
-     */
+    /** @var string */
     protected $description = 'Command description';
 
-    /**
-     * Execute the console command.
-     *
-     * @return mixed
-     */
     public function handle()
     {
         $this->header();
