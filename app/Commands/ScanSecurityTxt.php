@@ -29,6 +29,7 @@ class ScanSecurityTxt extends Command
      */
     public function handle()
     {
+        $this->header();
         $domain = $this->domain();
 
         $this->line("Looking for security.txt: <info>{$domain}</info>");

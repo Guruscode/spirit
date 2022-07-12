@@ -22,7 +22,7 @@ class ScanEmails extends Command
 
     public function handle()
     {
-        $this->info(PHP_EOL.'==> Spirit Email Scanner <=='.PHP_EOL);
+        $this->header();
 
         $path = $this->argument('path');
         $this->line("Checking <comment>{$path}</comment>");

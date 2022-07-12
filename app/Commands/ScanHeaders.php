@@ -29,6 +29,7 @@ class ScanHeaders extends Command
      */
     public function handle()
     {
+        $this->header();
         $domain = $this->domain();
 
         $this->line("Scanning headers: <info>{$domain}</info>");
