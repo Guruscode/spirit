@@ -34,26 +34,23 @@ class ScanSecurityTxt extends Command
 
         $this->line("Looking for security.txt: <info>{$domain}</info>");
 
-        $url = $domain.'/security.txt';
-        $this->line("Checking <comment>{$url}</comment>");
-        $response = Http::withUserAgent(config('scan.useragent'))
-            ->get($url);
-
-        $this->line($response->successful() ? '<info>FOUND</info>' : '<error>MISSING</error>');
-
-        $url = $domain.'/.well-known/security.txt';
-        $this->line("Checking <comment>{$url}</comment>");
-        $response = Http::withUserAgent(config('scan.useragent'))
-            ->get($url);
-
-        $this->line($response->successful() ? '<info>FOUND</info>' : '<error>MISSING</error>');
+        $this->checkUrl($domain.'/security.txt');
+        $this->checkUrl($domain.'/.well-known/security.txt');
     }
 
-    /**
-     * Define the command's schedule.
-     */
-    public function schedule(Schedule $schedule): void
+    public function checkUrl(string $url)
     {
-        // $schedule->command(static::class)->everyMinute();
+        $this->line("Checking <comment>{$url}</comment>");
+        $response = Http::withUserAgent(config('scan.useragent'))
+            ->get($url);
+
+        if (! $response->successful()) {
+            return $this->line('<error>MISSING</error>');
+        }
+
+        $this->line('<info>FOUND</info>');
+        $this->line('*** *** *** *** ***');
+        $this->line($response->body());
+        $this->line('*** *** *** *** ***');
     }
 }
