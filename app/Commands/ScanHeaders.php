@@ -4,7 +4,9 @@ namespace App\Commands;
 
 use App\Traits\Domains;
 use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
 
 class ScanHeaders extends Command
 {
@@ -34,8 +36,11 @@ class ScanHeaders extends Command
 
         $this->line("Scanning headers: <info>{$domain}</info>");
 
-        $response = Http::withUserAgent(config('scan.useragent'))
-            ->get($domain);
+        $response = Cache::remember(
+            __METHOD__.':'.$domain,
+            now()->addHour(),
+            fn () => Http::withUserAgent(config('scan.useragent'))->get($domain)
+        );
 
         $redirectedTo = (string) $response->effectiveUri();
 
@@ -43,10 +48,29 @@ class ScanHeaders extends Command
             $this->line("Redirected to <comment>{$redirectedTo}</comment>");
         }
 
+        $headers = collect($response->headers())
+            ->mapWithKeys(fn ($value, $key) => [strtolower($key) => $value])
+            ->sortBy(fn ($value, $key) => $key);
+
+        $maxKey = $headers->keys()->max(fn ($key) => strlen($key));
+
+        $this->line('');
+
+        $headers->each(
+            fn ($value, $key) => $this->line('<comment>'.Str::padRight($key, $maxKey).'</comment> '.implode(PHP_EOL, $value))
+        );
+
+        $this->line('');
         $this->line("Check: https://securityheaders.com/?hide=on&followRedirects=on&q={$domain}");
 
-        collect($response->headers())
-            ->each(fn ($value, $key) => $this->line("<comment>{$key}</comment>\t".implode(PHP_EOL, $value)));
+        if (isset($headers['set-cookie'])) {
+            $cookie = Str::of(implode(PHP_EOL, $headers['set-cookie']))->lower();
+            $this->line('Secure cookies:       '.($cookie->contains('secure') ? '✅ YES!' : '❌ NOPE!'));
+            $this->line('HttpOnly cookies:     '.($cookie->contains('httponly') ? '✅ YES!' : '❌ NOPE!'));
+            $this->line('SameSite=Lax cookies: '.($cookie->contains('samesite=lax') ? '✅ YES!' : '❌ NOPE!'));
+        }
+
+        $this->line('');
     }
 
     /**
